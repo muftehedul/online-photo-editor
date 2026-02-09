@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head><title>Simple Test</title></head>
+<body>
+    <canvas id="c" width="400" height="300" style="border:1px solid black"></canvas><br>
+    <input type="file" id="file" accept="image/*"><br>
+    <button onclick="save()">Save</button>
+    <button onclick="load()">Load</button>
+    <button onclick="location.reload()">Reload Page</button>
+    
+    <script>
+        const canvas = document.getElementById('c');
+        const ctx = canvas.getContext('2d');
+        
+        document.getElementById('file').onchange = function(e) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    ctx.drawImage(img, 0, 0, 400, 300);
+                    console.log('Image drawn');
+                    save();
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        };
+        
+        function save() {
+            const data = canvas.toDataURL();
+            localStorage.setItem('testCanvas', data);
+            console.log('Saved! Data length:', data.length);
+        }
+        
+        function load() {
+            const data = localStorage.getItem('testCanvas');
+            if (data) {
+                const img = new Image();
+                img.onload = function() {
+                    ctx.drawImage(img, 0, 0);
+                    console.log('Loaded!');
+                };
+                img.src = data;
+            } else {
+                console.log('Nothing saved');
+            }
+        }
+        
+        // Auto-load on page load
+        window.onload = load;
+    </script>
+</body>
+</html>

@@ -76,6 +76,210 @@ class PhotoEditor {
         this.setupTabs();
         this.updateHistoryList();
         this.loadFromLocalStorage();
+        this.generateFilterPreviews();
+    }
+
+    updateAdjustmentValue(name, value) {
+        document.getElementById(name + 'Val').textContent = value;
+    }
+
+    generateFilterPreviews() {
+        // Wait for image to load
+        setTimeout(() => {
+            const previews = document.querySelectorAll('.filter-preview');
+            previews.forEach(canvas => {
+                const filter = canvas.dataset.filter;
+                const ctx = canvas.getContext('2d');
+                
+                // Create small preview (100x80)
+                canvas.width = 100;
+                canvas.height = 80;
+                
+                // Draw current canvas scaled down
+                ctx.drawImage(this.canvas, 0, 0, 100, 80);
+                
+                // Apply filter to preview
+                const imageData = ctx.getImageData(0, 0, 100, 80);
+                this.applyFilterToImageData(imageData, filter);
+                ctx.putImageData(imageData, 0, 0);
+            });
+        }, 500);
+    }
+
+    applyFilterToImageData(imageData, filterName) {
+        const data = imageData.data;
+        
+        switch(filterName) {
+            case 'grayscale':
+                for (let i = 0; i < data.length; i += 4) {
+                    const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+                    data[i] = data[i + 1] = data[i + 2] = avg;
+                }
+                break;
+            case 'sepia':
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i], g = data[i + 1], b = data[i + 2];
+                    data[i] = Math.min(255, r * 0.393 + g * 0.769 + b * 0.189);
+                    data[i + 1] = Math.min(255, r * 0.349 + g * 0.686 + b * 0.168);
+                    data[i + 2] = Math.min(255, r * 0.272 + g * 0.534 + b * 0.131);
+                }
+                break;
+            case 'invert':
+                for (let i = 0; i < data.length; i += 4) {
+                    data[i] = 255 - data[i];
+                    data[i + 1] = 255 - data[i + 1];
+                    data[i + 2] = 255 - data[i + 2];
+                }
+                break;
+            case 'vintage':
+                for (let i = 0; i < data.length; i += 4) {
+                    data[i] = Math.min(255, data[i] * 0.9 + 30);
+                    data[i + 1] = Math.min(255, data[i + 1] * 0.85 + 20);
+                    data[i + 2] = Math.min(255, data[i + 2] * 0.7);
+                }
+                break;
+            case 'cold':
+                for (let i = 0; i < data.length; i += 4) {
+                    data[i] = Math.max(0, data[i] - 20);
+                    data[i + 2] = Math.min(255, data[i + 2] + 30);
+                }
+                break;
+            case 'warm':
+                for (let i = 0; i < data.length; i += 4) {
+                    data[i] = Math.min(255, data[i] + 30);
+                    data[i + 1] = Math.min(255, data[i + 1] + 10);
+                    data[i + 2] = Math.max(0, data[i + 2] - 20);
+                }
+                break;
+            case 'dramatic':
+                for (let i = 0; i < data.length; i += 4) {
+                    const factor = 1.5;
+                    data[i] = Math.min(255, (data[i] - 128) * factor + 128);
+                    data[i + 1] = Math.min(255, (data[i + 1] - 128) * factor + 128);
+                    data[i + 2] = Math.min(255, (data[i + 2] - 128) * factor + 128);
+                }
+                break;
+            case 'vivid':
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i], g = data[i + 1], b = data[i + 2];
+                    const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+                    data[i] = Math.min(255, gray + (r - gray) * 1.5);
+                    data[i + 1] = Math.min(255, gray + (g - gray) * 1.5);
+                    data[i + 2] = Math.min(255, gray + (b - gray) * 1.5);
+                }
+                break;
+            case 'noir':
+                for (let i = 0; i < data.length; i += 4) {
+                    const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+                    const val = Math.min(255, (avg - 128) * 1.3 + 128);
+                    data[i] = data[i + 1] = data[i + 2] = val;
+                }
+                break;
+            case 'sunset':
+                for (let i = 0; i < data.length; i += 4) {
+                    data[i] = Math.min(255, data[i] * 1.2 + 40);
+                    data[i + 1] = Math.min(255, data[i + 1] * 0.9 + 20);
+                    data[i + 2] = Math.max(0, data[i + 2] * 0.7 - 30);
+                }
+                break;
+            case 'ocean':
+                for (let i = 0; i < data.length; i += 4) {
+                    data[i] = Math.max(0, data[i] * 0.7 - 20);
+                    data[i + 1] = Math.min(255, data[i + 1] * 1.1 + 10);
+                    data[i + 2] = Math.min(255, data[i + 2] * 1.3 + 30);
+                }
+                break;
+            case 'cyberpunk':
+                for (let i = 0; i < data.length; i += 4) {
+                    data[i] = Math.min(255, data[i] * 1.2 + 30);
+                    data[i + 1] = Math.max(0, data[i + 1] * 0.8);
+                    data[i + 2] = Math.min(255, data[i + 2] * 1.4 + 40);
+                }
+                break;
+            case 'hdr':
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i], g = data[i + 1], b = data[i + 2];
+                    const lum = 0.299 * r + 0.587 * g + 0.114 * b;
+                    const factor = lum < 128 ? 1.3 : 0.8;
+                    data[i] = Math.min(255, r * factor);
+                    data[i + 1] = Math.min(255, g * factor);
+                    data[i + 2] = Math.min(255, b * factor);
+                    // Increase saturation
+                    const gray = (data[i] + data[i + 1] + data[i + 2]) / 3;
+                    data[i] = Math.min(255, gray + (data[i] - gray) * 1.4);
+                    data[i + 1] = Math.min(255, gray + (data[i + 1] - gray) * 1.4);
+                    data[i + 2] = Math.min(255, gray + (data[i + 2] - gray) * 1.4);
+                }
+                break;
+            case 'polaroid':
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i], g = data[i + 1], b = data[i + 2];
+                    data[i] = Math.min(255, r * 1.1 + 20);
+                    data[i + 1] = Math.min(255, g * 1.05 + 15);
+                    data[i + 2] = Math.min(255, b * 0.95 + 10);
+                    // Add slight contrast
+                    const factor = 1.2;
+                    data[i] = Math.min(255, (data[i] - 128) * factor + 128);
+                    data[i + 1] = Math.min(255, (data[i + 1] - 128) * factor + 128);
+                    data[i + 2] = Math.min(255, (data[i + 2] - 128) * factor + 128);
+                }
+                break;
+            case 'crossprocess':
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i], g = data[i + 1], b = data[i + 2];
+                    data[i] = Math.min(255, r * 1.3);
+                    data[i + 1] = Math.min(255, g * 0.9);
+                    data[i + 2] = Math.min(255, b * 1.2 + 20);
+                }
+                break;
+            case 'lomo':
+                for (let i = 0; i < data.length; i += 4) {
+                    // Increase contrast
+                    const factor = 1.5;
+                    data[i] = Math.min(255, (data[i] - 128) * factor + 128);
+                    data[i + 1] = Math.min(255, (data[i + 1] - 128) * factor + 128);
+                    data[i + 2] = Math.min(255, (data[i + 2] - 128) * factor + 128);
+                    // Boost saturation
+                    const gray = (data[i] + data[i + 1] + data[i + 2]) / 3;
+                    data[i] = Math.min(255, gray + (data[i] - gray) * 1.6);
+                    data[i + 1] = Math.min(255, gray + (data[i + 1] - gray) * 1.6);
+                    data[i + 2] = Math.min(255, gray + (data[i + 2] - gray) * 1.6);
+                }
+                break;
+            case 'technicolor':
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i], g = data[i + 1], b = data[i + 2];
+                    data[i] = Math.min(255, r * 1.4 - 20);
+                    data[i + 1] = Math.min(255, g * 1.2);
+                    data[i + 2] = Math.min(255, b * 1.3 - 10);
+                }
+                break;
+            case 'moonlight':
+                for (let i = 0; i < data.length; i += 4) {
+                    const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+                    data[i] = Math.max(0, avg * 0.8 - 20);
+                    data[i + 1] = Math.max(0, avg * 0.9 - 10);
+                    data[i + 2] = Math.min(255, avg * 1.2 + 30);
+                }
+                break;
+            case 'retro':
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i], g = data[i + 1], b = data[i + 2];
+                    data[i] = Math.min(255, r * 0.95 + 40);
+                    data[i + 1] = Math.min(255, g * 0.85 + 30);
+                    data[i + 2] = Math.min(255, b * 0.75 + 20);
+                }
+                break;
+            case 'softfocus':
+                // Soft focus effect - reduce contrast slightly
+                for (let i = 0; i < data.length; i += 4) {
+                    const factor = 0.8;
+                    data[i] = Math.min(255, (data[i] - 128) * factor + 128 + 20);
+                    data[i + 1] = Math.min(255, (data[i + 1] - 128) * factor + 128 + 20);
+                    data[i + 2] = Math.min(255, (data[i + 2] - 128) * factor + 128 + 20);
+                }
+                break;
+        }
     }
 
     saveToLocalStorage() {
@@ -133,6 +337,11 @@ class PhotoEditor {
                     this.layers[0].canvas.height = this.canvas.height;
                     const layerCtx = this.layers[0].canvas.getContext('2d');
                     layerCtx.drawImage(img, 0, 0);
+                    
+                    // Generate filter previews after image loads
+                    setTimeout(() => {
+                        this.generateFilterPreviews();
+                    }, 300);
                 };
                 img.onerror = () => {
                     console.error('Failed to load saved image');
@@ -609,6 +818,9 @@ class PhotoEditor {
                 
                 // Save original for filters
                 this.saveOriginalImage();
+                
+                // Generate filter previews
+                this.generateFilterPreviews();
                 
                 // Save to localStorage after a short delay
                 setTimeout(() => {

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Storage</title>
+</head>
+<body>
+    <h1>LocalStorage Test</h1>
+    <button onclick="testSave()">Save Test Data</button>
+    <button onclick="testLoad()">Load Test Data</button>
+    <button onclick="clearStorage()">Clear Storage</button>
+    <div id="output"></div>
+    
+    <script>
+        function testSave() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 100;
+            canvas.height = 100;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = 'red';
+            ctx.fillRect(0, 0, 100, 100);
+            
+            const data = {
+                test: 'hello',
+                canvasData: canvas.toDataURL()
+            };
+            
+            localStorage.setItem('test', JSON.stringify(data));
+            document.getElementById('output').innerHTML = 'Saved!';
+        }
+        
+        function testLoad() {
+            const saved = localStorage.getItem('test');
+            if (saved) {
+                const data = JSON.parse(saved);
+                document.getElementById('output').innerHTML = 'Loaded: ' + data.test + '<br><img src="' + data.canvasData + '">';
+            } else {
+                document.getElementById('output').innerHTML = 'Nothing saved';
+            }
+        }
+        
+        function clearStorage() {
+            localStorage.clear();
+            document.getElementById('output').innerHTML = 'Cleared!';
+        }
+    </script>
+</body>
+</html>

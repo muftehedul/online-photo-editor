@@ -247,6 +247,88 @@ function applyPresetFilters(editor, filterName) {
                 data[i + 2] = Math.min(255, data[i + 2] * 1.4 + 40);
             }
             break;
+        
+        case 'hdr':
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i], g = data[i + 1], b = data[i + 2];
+                const lum = 0.299 * r + 0.587 * g + 0.114 * b;
+                const factor = lum < 128 ? 1.3 : 0.8;
+                data[i] = Math.min(255, r * factor);
+                data[i + 1] = Math.min(255, g * factor);
+                data[i + 2] = Math.min(255, b * factor);
+                const gray = (data[i] + data[i + 1] + data[i + 2]) / 3;
+                data[i] = Math.min(255, gray + (data[i] - gray) * 1.4);
+                data[i + 1] = Math.min(255, gray + (data[i + 1] - gray) * 1.4);
+                data[i + 2] = Math.min(255, gray + (data[i + 2] - gray) * 1.4);
+            }
+            break;
+        
+        case 'polaroid':
+            for (let i = 0; i < data.length; i += 4) {
+                data[i] = Math.min(255, data[i] * 1.1 + 20);
+                data[i + 1] = Math.min(255, data[i + 1] * 1.05 + 15);
+                data[i + 2] = Math.min(255, data[i + 2] * 0.95 + 10);
+                const factor = 1.2;
+                data[i] = Math.min(255, (data[i] - 128) * factor + 128);
+                data[i + 1] = Math.min(255, (data[i + 1] - 128) * factor + 128);
+                data[i + 2] = Math.min(255, (data[i + 2] - 128) * factor + 128);
+            }
+            break;
+        
+        case 'crossprocess':
+            for (let i = 0; i < data.length; i += 4) {
+                data[i] = Math.min(255, data[i] * 1.3);
+                data[i + 1] = Math.min(255, data[i + 1] * 0.9);
+                data[i + 2] = Math.min(255, data[i + 2] * 1.2 + 20);
+            }
+            break;
+        
+        case 'lomo':
+            for (let i = 0; i < data.length; i += 4) {
+                const factor = 1.5;
+                data[i] = Math.min(255, (data[i] - 128) * factor + 128);
+                data[i + 1] = Math.min(255, (data[i + 1] - 128) * factor + 128);
+                data[i + 2] = Math.min(255, (data[i + 2] - 128) * factor + 128);
+                const gray = (data[i] + data[i + 1] + data[i + 2]) / 3;
+                data[i] = Math.min(255, gray + (data[i] - gray) * 1.6);
+                data[i + 1] = Math.min(255, gray + (data[i + 1] - gray) * 1.6);
+                data[i + 2] = Math.min(255, gray + (data[i + 2] - gray) * 1.6);
+            }
+            break;
+        
+        case 'technicolor':
+            for (let i = 0; i < data.length; i += 4) {
+                data[i] = Math.min(255, data[i] * 1.4 - 20);
+                data[i + 1] = Math.min(255, data[i + 1] * 1.2);
+                data[i + 2] = Math.min(255, data[i + 2] * 1.3 - 10);
+            }
+            break;
+        
+        case 'moonlight':
+            for (let i = 0; i < data.length; i += 4) {
+                const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+                data[i] = Math.max(0, avg * 0.8 - 20);
+                data[i + 1] = Math.max(0, avg * 0.9 - 10);
+                data[i + 2] = Math.min(255, avg * 1.2 + 30);
+            }
+            break;
+        
+        case 'retro':
+            for (let i = 0; i < data.length; i += 4) {
+                data[i] = Math.min(255, data[i] * 0.95 + 40);
+                data[i + 1] = Math.min(255, data[i + 1] * 0.85 + 30);
+                data[i + 2] = Math.min(255, data[i + 2] * 0.75 + 20);
+            }
+            break;
+        
+        case 'softfocus':
+            for (let i = 0; i < data.length; i += 4) {
+                const factor = 0.8;
+                data[i] = Math.min(255, (data[i] - 128) * factor + 128 + 20);
+                data[i + 1] = Math.min(255, (data[i + 1] - 128) * factor + 128 + 20);
+                data[i + 2] = Math.min(255, (data[i + 2] - 128) * factor + 128 + 20);
+            }
+            break;
     }
 
     layerCtx.putImageData(imageData, 0, 0);

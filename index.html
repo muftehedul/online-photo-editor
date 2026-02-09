@@ -80,32 +80,126 @@
             <button onclick="editor.autoColor()">Auto Color</button>
 
             <h3>Preset Filters</h3>
-            <button onclick="editor.applyPresetFilter('grayscale')">Grayscale</button>
-            <button onclick="editor.applyPresetFilter('sepia')">Sepia</button>
-            <button onclick="editor.applyPresetFilter('invert')">Invert</button>
-            <button onclick="editor.applyPresetFilter('vintage')">Vintage</button>
-            <button onclick="editor.applyPresetFilter('cold')">Cold</button>
-            <button onclick="editor.applyPresetFilter('warm')">Warm</button>
-            <button onclick="editor.applyPresetFilter('dramatic')">Dramatic</button>
-            <button onclick="editor.applyPresetFilter('vivid')">Vivid</button>
-            <button onclick="editor.applyPresetFilter('noir')">Noir</button>
-            <button onclick="editor.applyPresetFilter('sunset')">Sunset</button>
-            <button onclick="editor.applyPresetFilter('ocean')">Ocean</button>
-            <button onclick="editor.applyPresetFilter('cyberpunk')">Cyberpunk</button>
+            <div class="filter-grid">
+                <div class="filter-item" onclick="editor.applyPresetFilter('grayscale')">
+                    <canvas class="filter-preview" data-filter="grayscale"></canvas>
+                    <span>Grayscale</span>
+                </div>
+                <div class="filter-item" onclick="editor.applyPresetFilter('sepia')">
+                    <canvas class="filter-preview" data-filter="sepia"></canvas>
+                    <span>Sepia</span>
+                </div>
+                <div class="filter-item" onclick="editor.applyPresetFilter('invert')">
+                    <canvas class="filter-preview" data-filter="invert"></canvas>
+                    <span>Invert</span>
+                </div>
+                <div class="filter-item" onclick="editor.applyPresetFilter('vintage')">
+                    <canvas class="filter-preview" data-filter="vintage"></canvas>
+                    <span>Vintage</span>
+                </div>
+                <div class="filter-item" onclick="editor.applyPresetFilter('cold')">
+                    <canvas class="filter-preview" data-filter="cold"></canvas>
+                    <span>Cold</span>
+                </div>
+                <div class="filter-item" onclick="editor.applyPresetFilter('warm')">
+                    <canvas class="filter-preview" data-filter="warm"></canvas>
+                    <span>Warm</span>
+                </div>
+                <div class="filter-item" onclick="editor.applyPresetFilter('dramatic')">
+                    <canvas class="filter-preview" data-filter="dramatic"></canvas>
+                    <span>Dramatic</span>
+                </div>
+                <div class="filter-item" onclick="editor.applyPresetFilter('vivid')">
+                    <canvas class="filter-preview" data-filter="vivid"></canvas>
+                    <span>Vivid</span>
+                </div>
+                <div class="filter-item" onclick="editor.applyPresetFilter('noir')">
+                    <canvas class="filter-preview" data-filter="noir"></canvas>
+                    <span>Noir</span>
+                </div>
+                <div class="filter-item" onclick="editor.applyPresetFilter('sunset')">
+                    <canvas class="filter-preview" data-filter="sunset"></canvas>
+                    <span>Sunset</span>
+                </div>
+                <div class="filter-item" onclick="editor.applyPresetFilter('ocean')">
+                    <canvas class="filter-preview" data-filter="ocean"></canvas>
+                    <span>Ocean</span>
+                </div>
+                <div class="filter-item" onclick="editor.applyPresetFilter('cyberpunk')">
+                    <canvas class="filter-preview" data-filter="cyberpunk"></canvas>
+                    <span>Cyberpunk</span>
+                </div>
+                <div class="filter-item" onclick="editor.applyPresetFilter('hdr')">
+                    <canvas class="filter-preview" data-filter="hdr"></canvas>
+                    <span>HDR</span>
+                </div>
+                <div class="filter-item" onclick="editor.applyPresetFilter('polaroid')">
+                    <canvas class="filter-preview" data-filter="polaroid"></canvas>
+                    <span>Polaroid</span>
+                </div>
+                <div class="filter-item" onclick="editor.applyPresetFilter('crossprocess')">
+                    <canvas class="filter-preview" data-filter="crossprocess"></canvas>
+                    <span>Cross Process</span>
+                </div>
+                <div class="filter-item" onclick="editor.applyPresetFilter('lomo')">
+                    <canvas class="filter-preview" data-filter="lomo"></canvas>
+                    <span>Lomo</span>
+                </div>
+                <div class="filter-item" onclick="editor.applyPresetFilter('technicolor')">
+                    <canvas class="filter-preview" data-filter="technicolor"></canvas>
+                    <span>Technicolor</span>
+                </div>
+                <div class="filter-item" onclick="editor.applyPresetFilter('moonlight')">
+                    <canvas class="filter-preview" data-filter="moonlight"></canvas>
+                    <span>Moonlight</span>
+                </div>
+                <div class="filter-item" onclick="editor.applyPresetFilter('retro')">
+                    <canvas class="filter-preview" data-filter="retro"></canvas>
+                    <span>Retro</span>
+                </div>
+                <div class="filter-item" onclick="editor.applyPresetFilter('softfocus')">
+                    <canvas class="filter-preview" data-filter="softfocus"></canvas>
+                    <span>Soft Focus</span>
+                </div>
+            </div>
 
             <h3>Adjustments</h3>
-            <label>Brightness: <input type="range" id="brightness" min="-100" max="100" value="0" oninput="editor.applyFilters()"></label>
-            <label>Contrast: <input type="range" id="contrast" min="-100" max="100" value="0" oninput="editor.applyFilters()"></label>
-            <label>Exposure: <input type="range" id="exposure" min="-100" max="100" value="0" oninput="editor.applyFilters()"></label>
-            <label>Highlights: <input type="range" id="highlights" min="-100" max="100" value="0" oninput="editor.applyFilters()"></label>
-            <label>Shadows: <input type="range" id="shadows" min="-100" max="100" value="0" oninput="editor.applyFilters()"></label>
-            <label>Saturation: <input type="range" id="saturation" min="-100" max="100" value="0" oninput="editor.applyFilters()"></label>
-            <label>Vibrance: <input type="range" id="vibrance" min="-100" max="100" value="0" oninput="editor.applyFilters()"></label>
-            <label>Temperature: <input type="range" id="temperature" min="-100" max="100" value="0" oninput="editor.applyFilters()"></label>
-            <label>Tint: <input type="range" id="tint" min="-100" max="100" value="0" oninput="editor.applyFilters()"></label>
-            <label>Sharpness: <input type="range" id="sharpness" min="0" max="100" value="0" oninput="editor.applyFilters()"></label>
-            <label>Blur: <input type="range" id="blur" min="0" max="10" value="0" oninput="editor.applyFilters()"></label>
-            <label>Vignette: <input type="range" id="vignette" min="0" max="100" value="0" oninput="editor.applyFilters()"></label>
+            <label>Brightness: <span id="brightnessVal">0</span>
+                <input type="range" id="brightness" min="-100" max="100" value="0" oninput="editor.updateAdjustmentValue('brightness', this.value); editor.applyFilters()">
+            </label>
+            <label>Contrast: <span id="contrastVal">0</span>
+                <input type="range" id="contrast" min="-100" max="100" value="0" oninput="editor.updateAdjustmentValue('contrast', this.value); editor.applyFilters()">
+            </label>
+            <label>Exposure: <span id="exposureVal">0</span>
+                <input type="range" id="exposure" min="-100" max="100" value="0" oninput="editor.updateAdjustmentValue('exposure', this.value); editor.applyFilters()">
+            </label>
+            <label>Highlights: <span id="highlightsVal">0</span>
+                <input type="range" id="highlights" min="-100" max="100" value="0" oninput="editor.updateAdjustmentValue('highlights', this.value); editor.applyFilters()">
+            </label>
+            <label>Shadows: <span id="shadowsVal">0</span>
+                <input type="range" id="shadows" min="-100" max="100" value="0" oninput="editor.updateAdjustmentValue('shadows', this.value); editor.applyFilters()">
+            </label>
+            <label>Saturation: <span id="saturationVal">0</span>
+                <input type="range" id="saturation" min="-100" max="100" value="0" oninput="editor.updateAdjustmentValue('saturation', this.value); editor.applyFilters()">
+            </label>
+            <label>Vibrance: <span id="vibranceVal">0</span>
+                <input type="range" id="vibrance" min="-100" max="100" value="0" oninput="editor.updateAdjustmentValue('vibrance', this.value); editor.applyFilters()">
+            </label>
+            <label>Temperature: <span id="temperatureVal">0</span>
+                <input type="range" id="temperature" min="-100" max="100" value="0" oninput="editor.updateAdjustmentValue('temperature', this.value); editor.applyFilters()">
+            </label>
+            <label>Tint: <span id="tintVal">0</span>
+                <input type="range" id="tint" min="-100" max="100" value="0" oninput="editor.updateAdjustmentValue('tint', this.value); editor.applyFilters()">
+            </label>
+            <label>Sharpness: <span id="sharpnessVal">0</span>
+                <input type="range" id="sharpness" min="0" max="100" value="0" oninput="editor.updateAdjustmentValue('sharpness', this.value); editor.applyFilters()">
+            </label>
+            <label>Blur: <span id="blurVal">0</span>
+                <input type="range" id="blur" min="0" max="10" value="0" oninput="editor.updateAdjustmentValue('blur', this.value); editor.applyFilters()">
+            </label>
+            <label>Vignette: <span id="vignetteVal">0</span>
+                <input type="range" id="vignette" min="0" max="100" value="0" oninput="editor.updateAdjustmentValue('vignette', this.value); editor.applyFilters()">
+            </label>
             <button onclick="editor.commitFilters()">Commit</button>
             <button onclick="editor.resetFilters()">Reset All</button>
         </div>
