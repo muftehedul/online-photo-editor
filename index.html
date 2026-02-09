@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Editor Pro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="toolbar">
+        <div class="tool-group">
+            <button onclick="editor.undo()">↶ Undo</button>
+            <button onclick="editor.redo()">↷ Redo</button>
+        </div>
+        <div class="tool-group">
+            <button onclick="editor.zoomOut()">− Zoom Out</button>
+            <span id="zoomLevel">100%</span>
+            <button onclick="editor.zoomIn()">+ Zoom In</button>
+            <button onclick="editor.resetZoom()">Reset</button>
+        </div>
+        <div class="tool-group">
+            <button onclick="editor.clearCanvas()">Clear Layer</button>
+            <button onclick="editor.downloadImage()">💾 Save Image</button>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="sidebar left">
+            <h3>Tools</h3>
+            <div class="toolbox">
+                <button class="tool-btn active" data-tool="brush" title="Brush (B)">🖌️</button>
+                <button class="tool-btn" data-tool="eraser" title="Eraser (E)">🧹</button>
+                <button class="tool-btn" data-tool="select" title="Selection (S)">⬚</button>
+                <button class="tool-btn" data-tool="crop" title="Crop (C)">✂️</button>
+                <button class="tool-btn" data-tool="transform" title="Transform (T)">↔️</button>
+                <button class="tool-btn" data-tool="history-brush" title="History Brush (H)">🕐</button>
+                <button class="tool-btn" data-tool="rect" title="Rectangle (R)">▭</button>
+                <button class="tool-btn" data-tool="circle" title="Circle (O)">○</button>
+                <button class="tool-btn" data-tool="line" title="Line (L)">╱</button>
+                <button class="tool-btn" data-tool="text" title="Text (T)">T</button>
+                <button class="tool-btn" data-tool="fill" title="Fill (F)">🪣</button>
+            </div>
+
+            <h3>Tool Settings</h3>
+            <label>Color: <input type="color" id="colorPicker" value="#000000"></label>
+            <label>Size: <input type="range" id="brushSize" min="1" max="50" value="5">
+            <span id="sizeLabel">5px</span></label>
+
+            <h3>Layers</h3>
+            <div id="layersList"></div>
+            <button onclick="editor.addLayer()">+ Add Layer</button>
+            
+            <h3>Load Image</h3>
+            <input type="file" id="imageUpload" accept="image/*">
+            <button onclick="editor.testDraw()" style="margin-top:10px">Test Draw (Red Square)</button>
+            <button onclick="localStorage.clear(); location.reload()" style="margin-top:5px">Clear Storage</button>
+        </div>
+
+        <div class="canvas-container">
+            <div class="tabs">
+                <div class="tab active" data-tab="0">Canvas 1</div>
+                <button class="add-tab" onclick="editor.addTab()">+</button>
+            </div>
+            <div class="canvas-wrapper">
+                <canvas id="canvas" width="800" height="600"></canvas>
+                <div id="cropControls" class="crop-controls">
+                    <button onclick="editor.applyCropSelection()" title="Apply Crop">✓</button>
+                    <button onclick="editor.cancelCrop()" title="Cancel">✕</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar right">
+            <h3>History</h3>
+            <div id="historyList" class="history-list"></div>
+
+            <h3>Auto Enhance</h3>
+            <button onclick="editor.autoEnhance()">✨ Auto Enhance</button>
+            <button onclick="editor.autoContrast()">Auto Contrast</button>
+            <button onclick="editor.autoColor()">Auto Color</button>
+
+            <h3>Preset Filters</h3>
+            <button onclick="editor.applyPresetFilter('grayscale')">Grayscale</button>
+            <button onclick="editor.applyPresetFilter('sepia')">Sepia</button>
+            <button onclick="editor.applyPresetFilter('invert')">Invert</button>
+            <button onclick="editor.applyPresetFilter('vintage')">Vintage</button>
+            <button onclick="editor.applyPresetFilter('cold')">Cold</button>
+            <button onclick="editor.applyPresetFilter('warm')">Warm</button>
+            <button onclick="editor.applyPresetFilter('dramatic')">Dramatic</button>
+            <button onclick="editor.applyPresetFilter('vivid')">Vivid</button>
+            <button onclick="editor.applyPresetFilter('noir')">Noir</button>
+            <button onclick="editor.applyPresetFilter('sunset')">Sunset</button>
+            <button onclick="editor.applyPresetFilter('ocean')">Ocean</button>
+            <button onclick="editor.applyPresetFilter('cyberpunk')">Cyberpunk</button>
+
+            <h3>Adjustments</h3>
+            <label>Brightness: <input type="range" id="brightness" min="-100" max="100" value="0" oninput="editor.applyFilters()"></label>
+            <label>Contrast: <input type="range" id="contrast" min="-100" max="100" value="0" oninput="editor.applyFilters()"></label>
+            <label>Exposure: <input type="range" id="exposure" min="-100" max="100" value="0" oninput="editor.applyFilters()"></label>
+            <label>Highlights: <input type="range" id="highlights" min="-100" max="100" value="0" oninput="editor.applyFilters()"></label>
+            <label>Shadows: <input type="range" id="shadows" min="-100" max="100" value="0" oninput="editor.applyFilters()"></label>
+            <label>Saturation: <input type="range" id="saturation" min="-100" max="100" value="0" oninput="editor.applyFilters()"></label>
+            <label>Vibrance: <input type="range" id="vibrance" min="-100" max="100" value="0" oninput="editor.applyFilters()"></label>
+            <label>Temperature: <input type="range" id="temperature" min="-100" max="100" value="0" oninput="editor.applyFilters()"></label>
+            <label>Tint: <input type="range" id="tint" min="-100" max="100" value="0" oninput="editor.applyFilters()"></label>
+            <label>Sharpness: <input type="range" id="sharpness" min="0" max="100" value="0" oninput="editor.applyFilters()"></label>
+            <label>Blur: <input type="range" id="blur" min="0" max="10" value="0" oninput="editor.applyFilters()"></label>
+            <label>Vignette: <input type="range" id="vignette" min="0" max="100" value="0" oninput="editor.applyFilters()"></label>
+            <button onclick="editor.commitFilters()">Commit</button>
+            <button onclick="editor.resetFilters()">Reset All</button>
+        </div>
+    </div>
+
+    <script src="filters.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
